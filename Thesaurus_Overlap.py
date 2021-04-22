@@ -10,7 +10,6 @@ words = 'beginning'
 
 # ___________________________________________________________________
 words = words.split()
-word_count = len(words)
 
 syn_dict = {}
 #loop to load data for each word
@@ -18,12 +17,10 @@ for word in words:
     url = 'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/'+word+'?key=53d8ba08-53f4-49b4-be6c-cadbab5a3aaf'
     response = urllib.request.urlopen(url)
     data = json.load(response)
-    # with open('C:/Users/User/Documents/Misc/Thesaurus Stuff/data'+word+'.txt', 'w') as outfile:
-    #     json.dump(data, outfile)
+    
     syn_list = []
-    #loop to get to (python, not Merriam) dictionary within (python) dictionary or something
+    #loop to get to (python, not Merriam) dictionary within (python) dictionary
     for datum in data:
-        # print(datum['meta']['syns'])
         #now at lowest level of (python) dictionary, which is where the synonyms are
         for item in datum['meta']['syns']:
             #looping through all the synonyms listed for the word and adding distinct synonyms to a list
@@ -33,7 +30,7 @@ for word in words:
             syn_list.sort()
     syn_dict.update({word:syn_list})
 
-# Convert Key-Value list Dictionary to Lists of List
+# Convert Dictionary to Lists of List
 res = []
 for key, val in syn_dict.items():
     res.append(val)
