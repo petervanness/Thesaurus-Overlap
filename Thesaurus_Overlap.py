@@ -2,11 +2,11 @@ import json
 import urllib.request, urllib.parse, urllib.error
 
 # ___________________________________________________________________
-# Enter words of interest to find any overlapping synonyms
+# Enter words of interest  ('smelly offensive') to find any overlapping synonyms
 words = 'beginning'
 
 ## input function if desirable
-# words = input("Enter words of interest to find any overlapping synonyms ('AA BB CC'):")
+# words = input("Enter words of interest to find any overlapping synonyms ('strong true'):")
 
 # ___________________________________________________________________
 words = words.split()
