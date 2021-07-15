@@ -6,7 +6,7 @@ import urllib.request, urllib.parse, urllib.error
 words = 'beginning'
 
 ## input function if desirable
-# words = input("Enter words of interest to find any overlapping synonyms ('strong true'):")
+# words = input("Enter words of interest to find any overlapping synonyms ('aa bb cc'):")
 
 # ___________________________________________________________________
 words = words.split()
