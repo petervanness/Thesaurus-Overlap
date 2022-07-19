@@ -15,7 +15,7 @@ syn_dict = {}
 #loop to load data for each word
 try:
     for word in words:
-        url = 'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/'+word+'?key=53d8ba08-53f4-49b4-be6c-cadbab5a3aaf'
+        url = 'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/'+word+'?key='+api_key
         response = urllib.request.urlopen(url)
         data = json.load(response)
 
