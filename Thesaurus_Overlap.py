@@ -1,6 +1,8 @@
 import json
 import urllib.request, urllib.parse, urllib.error
 
+api_key = ''
+
 # ___________________________________________________________________
 # Enter words of interest  ('smelly offensive') to find any overlapping synonyms
 words = 'beginning'
@@ -11,42 +13,37 @@ words = 'beginning'
 # ___________________________________________________________________
 words = words.split()
 
-syn_dict = {}
-#loop to load data for each word
-try:
-    for word in words:
-        url = 'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/'+word+'?key='+api_key
-        response = urllib.request.urlopen(url)
-        data = json.load(response)
+syn_dict: dict[str,list] = {}
+missing_words = []
 
-        syn_list = []
-        #loop to get to (python, not Merriam) dictionary within (python) dictionary
-        for datum in data:
-            #now at lowest level of (python) dictionary, which is where the synonyms are
-            for item in datum['meta']['syns']:
-                #looping through all the synonyms listed for the word and adding distinct synonyms to a list
-                for syn in item:
-                    if syn not in syn_list:
-                        syn_list.append(syn)
-                syn_list.sort()
-        syn_dict.update({word:syn_list})
+for word in words:
+    url = f'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={api_key}'
+    response = urllib.request.urlopen(url)
+    data = json.load(response)
+    if isinstance(data[0], dict):
+        for definition in data:
+            for syn_group in definition['meta']['syns']:
+                if word in syn_dict.keys():
+                    syn_dict[word] = list(set(syn_dict[word] + syn_group))
+                else:
+                    syn_dict[word] = syn_group
+    else:
+        syn_dict[word] = []
+        print(f'{word} not found.')
+        missing_words.append(word)
 
-    # Convert Dictionary to Lists of List
-    res = []
-    for key, val in syn_dict.items():
-        res.append(val)
+for word in words:
+    if (word not in syn_dict.keys() or syn_dict[word] == [] or syn_dict[word] == '') and word not in missing_words:
+        print(f'Synonyms for {word} not found.')
 
-    #find intersection of lists
-    overlap = list(set.intersection(*map(set,res)))
-except:
-    overlap = []
-    syn_list = []
+
+res = [sorted(i) for i in syn_dict.values()]
+overlap = list(set.intersection(*map(set,res)))
 overlap.sort()
 
-if len(overlap) == 0 and len(syn_list) == 0:
-    print('Word(s) not found.')
-elif len(overlap) == 0:
+if len(overlap) == 0:
     print('These words have no overlapping synonyms.')
 else:
     for i in overlap:
-        print(i)
+        if i not in words:
+            print(i)
